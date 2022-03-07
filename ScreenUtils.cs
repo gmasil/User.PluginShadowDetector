@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace User.PluginShadowDetector
 {
-    class ScreenUtils
+    public class ScreenUtils
     {
         [DllImport("user32.dll")]
         static extern IntPtr GetDC(IntPtr hwnd);
@@ -18,28 +18,38 @@ namespace User.PluginShadowDetector
         [DllImport("user32.dll")]
         static extern bool GetCursorPos(ref Point lpPoint);
 
-        static public Point GetCursorPosition()
+        private IntPtr hdc;
+
+        public ScreenUtils()
+        {
+            hdc = GetDC(IntPtr.Zero);
+        }
+
+        public void CleanUp()
+        {
+            ReleaseDC(IntPtr.Zero, hdc);
+        }
+
+        public Point GetCursorPosition()
         {
             Point cursor = new Point();
             GetCursorPos(ref cursor);
             return cursor;
         }
 
-        static public Color GetPixelColorAtCursor()
+        public Color GetPixelColorAtCursor()
         {
             return GetPixelColor(GetCursorPosition());
         }
 
-        static public Color GetPixelColor(Point P)
+        public Color GetPixelColor(Point P)
         {
             return GetPixelColor(P.X, P.Y);
         }
 
-        static public Color GetPixelColor(int x, int y)
+        public Color GetPixelColor(int x, int y)
         {
-            IntPtr hdc = GetDC(IntPtr.Zero);
-            uint pixel = GetPixel(hdc, x, y);
-            ReleaseDC(IntPtr.Zero, hdc);
+            uint pixel = GetPixel(this.hdc, x, y);
             Color color = Color.FromArgb((int)(pixel & 0x000000FF), (int)(pixel & 0x0000FF00) >> 8, (int)(pixel & 0x00FF0000) >> 16);
             return color;
         }

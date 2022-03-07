@@ -13,6 +13,7 @@ namespace User.PluginShadowDetector
     public class PluginShadowDetector : IPlugin, IDataPlugin, IWPFSettingsV2
     {
         public PluginShadowDetectorSettings Settings;
+        public ScreenUtils Screen;
 
         /// <summary>
         /// Instance of the current plugin manager
@@ -51,6 +52,7 @@ namespace User.PluginShadowDetector
         {
             // Save settings
             this.SaveCommonSettings("GeneralSettings", Settings);
+            Screen.CleanUp();
         }
 
         /// <summary>
@@ -74,6 +76,7 @@ namespace User.PluginShadowDetector
 
             // Load settings
             Settings = this.ReadCommonSettings("GeneralSettings", () => new PluginShadowDetectorSettings());
+            Screen = new ScreenUtils();
 
             this.AttachDelegate("IsInShadow", IsInShadow);
             this.AttachDelegate("BrightnessValue", GetBrightnessValue);
@@ -81,7 +84,7 @@ namespace User.PluginShadowDetector
 
             this.AddAction("AddCursorPositionToReferencePoints", (a, b) =>
             {
-                Settings.Points.Add(ScreenUtils.GetCursorPosition());
+                Settings.Points.Add(Screen.GetCursorPosition());
             });
 
             this.AddAction("IncreaseBrightnessThreshold", (a, b) =>
@@ -115,7 +118,7 @@ namespace User.PluginShadowDetector
             int totalBrightness = 0;
             foreach(Point p in Settings.Points)
             {
-                Color color = ScreenUtils.GetPixelColor(p);
+                Color color = Screen.GetPixelColor(p);
                 int value = (color.R + color.G + color.B) / 3;
                 totalBrightness += (value / Settings.Points.Count);
             }
