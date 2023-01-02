@@ -6,35 +6,75 @@
              xmlns:local="clr-namespace:User.PluginShadowDetector"
              xmlns:styles="clr-namespace:SimHub.Plugins.Styles;assembly=SimHub.Plugins" mc:Ignorable="d" 
              xmlns:ui="clr-namespace:SimHub.Plugins.UI;assembly=SimHub.Plugins" 
-             d:DesignHeight="500" d:DesignWidth="300">
+             d:DesignHeight="800" d:DesignWidth="300">
 
     <Grid>
-        <StackPanel MinHeight="26">
-            <ui:TitledSlider x:Name="BrightnessThresholdSlider" Title="Brightness threshold" Minimum="0" Maximum="255" Value="128" Loaded="BrightnessThresholdSlider_Loaded"></ui:TitledSlider>
+        <styles:SHSection Title="MANAGE YOUR SHADOW DETECTION">
+            <StackPanel>
+                <StackPanel Margin="0 0 0 10">
+                    <ui:TitledSlider x:Name="BrightnessThresholdSlider" Title="Brightness threshold" Minimum="0" Maximum="255" Value="128" Loaded="BrightnessThresholdSlider_Loaded"></ui:TitledSlider>
+                </StackPanel>
 
-            <StackPanel Margin="0 26">
-                <Label>Reference Points</Label>
-                <TextBlock TextWrapping="WrapWithOverflow" Padding="5 0">
-                    Hint: Add multiple pixel locations from your screen where your cars dashboard is visable in the format 1640,1310 (x,y).
-                </TextBlock>
-                <Grid Margin="5 0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="26" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="60" />
-                    </Grid.ColumnDefinitions>
-                    <TextBox x:Name="TxtPoint" Grid.Row="0" Grid.Column="0" Loaded="TxtPoint_Loaded" />
-                    <styles:SHButtonPrimary x:Name="BtnAddPoint" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1" Margin="5 0 0 0" Padding="4" Width="53" Click="BtnAddPoint_Click">Add</styles:SHButtonPrimary>
-                </Grid>
-                <Label x:Name="LblAddError" Foreground="Red" FontSize="8pt" Visibility="Hidden">Error Template</Label>
-                <Label>Current Points:</Label>
-                <ListBox x:Name="LstPoints" SelectionMode="Multiple" MinHeight="26" Margin="5 0" Loaded="LstPoints_Loaded"></ListBox>
-                <styles:SHButtonPrimary x:Name="BtnDeletePoint" HorizontalAlignment="Right" Height="20" Padding="4" Margin="5" FontSize="7pt" Click="BtnDeletePoint_Click">Delete Point</styles:SHButtonPrimary>
+                <StackPanel Margin="0 0 0 20">
+                    <Label>Reference Points</Label>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="5 0">
+                    Hint: Add multiple pixel locations from your screen where your cars dashboard is visible
+                    </TextBlock>
+                    <Grid Margin="5 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="26" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="60" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TxtPoint" Grid.Row="0" Grid.Column="0" Loaded="TxtPoint_Loaded" />
+                        <styles:SHButtonPrimary x:Name="BtnAddPoint" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1" Margin="5 0 0 0" Padding="4" Width="53" Click="BtnAddPoint_Click">Add</styles:SHButtonPrimary>
+                    </Grid>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="5 0">
+                    Format: x,y (e.g.: 1640,1310)
+                    </TextBlock>
+                    <Label x:Name="LblAddError" Foreground="Red" FontSize="8pt" Visibility="Hidden">Error Template</Label>
+                </StackPanel>
+
+                <StackPanel Margin="0 0 0 30">
+                    <Label>Keybinding</Label>
+                    <TextBlock TextWrapping="WrapWithOverflow" Padding="5 0">
+                    You can add a keybinding to easily add a reference point by moving your mouse to the desired location on your screen and press the assigned key
+                    </TextBlock>
+                    <ui:ControlsEditor FriendlyName="Add Point at Cursor" ActionName="PluginShadowDetector.AddCursorPositionToReferencePoints"></ui:ControlsEditor>
+                </StackPanel>
+
+                <StackPanel Margin="0 0 0 30">
+                    <Label>Current Points</Label>
+                    <ListBox x:Name="LstPoints" SelectionMode="Multiple" MinHeight="26" Margin="5 0" Loaded="LstPoints_Loaded"></ListBox>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="68" />
+                        </Grid.ColumnDefinitions>
+                        <styles:SHButtonPrimary x:Name="BtnDeletePoint" HorizontalAlignment="Right" Height="20" Padding="4" Margin="5" FontSize="7pt" Click="BtnDeletePoint_Click" Grid.Row="0" Grid.Column="0">Delete Point</styles:SHButtonPrimary>
+                        <styles:SHButtonPrimary x:Name="BtnClearPoint" HorizontalAlignment="Right" Height="20" Padding="4" Margin="5" FontSize="7pt" Click="BtnClearPoint_Click" Grid.Row="0" Grid.Column="1">Clear Points</styles:SHButtonPrimary>
+                    </Grid>
+                </StackPanel>
+
+                <StackPanel Margin="0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="67" />
+                        </Grid.ColumnDefinitions>
+                        <styles:SHButtonPrimary x:Name="BtnSave" HorizontalAlignment="Right" Click="BtnSave_Click" Grid.Row="0" Grid.Column="0">Save</styles:SHButtonPrimary>
+                        <styles:SHButtonSecondary x:Name="BtnReset" HorizontalAlignment="Right" Click="BtnReset_Click" Grid.Row="0" Grid.Column="1">Reset</styles:SHButtonSecondary>
+                    </Grid>
+                </StackPanel>
             </StackPanel>
-
-            <styles:SHButtonPrimary x:Name="BtnSave" HorizontalAlignment="Right" Click="BtnSave_Click">Save</styles:SHButtonPrimary>
-        </StackPanel>
+        </styles:SHSection>
     </Grid>
 </UserControl>

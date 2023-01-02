@@ -84,21 +84,49 @@ namespace User.PluginShadowDetector
 
         private void BrightnessThresholdSlider_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            BrightnessThresholdSlider.Value = Plugin.Settings.BrightnessThreshold;
+            LoadBrightnessThreshold();
         }
 
         private void TxtPoint_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            TxtPoint.Text = "";
+            LoadAddText();
         }
 
         private void LstPoints_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            LoadReferencePoints();
+        }
+
+        private void BtnReset_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            LoadBrightnessThreshold();
+            LoadReferencePoints();
+            LoadAddText();
+        }
+
+        private void LoadBrightnessThreshold()
+        {
+            BrightnessThresholdSlider.Value = Plugin.Settings.BrightnessThreshold;
+        }
+
+        private void LoadReferencePoints()
         {
             LstPoints.Items.Clear();
             foreach (Point p in Plugin.Settings.Points)
             {
                 LstPoints.Items.Add(p.X + ", " + p.Y);
             }
+        }
+
+        private void LoadAddText()
+        {
+            TxtPoint.Text = "";
+            LblAddError.Visibility = System.Windows.Visibility.Hidden;
+        }
+
+        private void BtnClearPoint_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            LstPoints.Items.Clear();
         }
     }
 }
